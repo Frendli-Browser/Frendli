@@ -1,0 +1,75 @@
+:root {
+	--intense-blur: rgba(255, 255, 255, 0.8);
+	--lighter-blur: rgba(255, 255, 255, 0.5);
+}
+
+html {
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	background-image: url(https://github.com/notAperson535/Win11-HTML/blob/main/img/backgroundlight.jpg?raw=true);
+	background-position: 50%;
+	background-size: cover;
+}
+
+#sidebar {
+	width: 200px;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: 20px;
+	box-sizing: border-box;
+	background: var(--intense-blur);
+	backdrop-filter: saturate(3) blur(20px);
+}
+
+#tabs {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+}
+
+.tab {
+	width: 100%;
+	text-align: start;
+	border: none;
+	height: 35px;
+	border-radius: 5px;
+	background: none;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.tab.active {
+	box-shadow: 2px 2px 5px -4px rgb(119 119 119 / 71%);
+	background: var(--lighter-blur);
+	font-weight: 600;
+}
+
+.tabfavicon {
+	width: 20px;
+}
+
+.tab>p {
+	margin: 0;
+}
+
+webview {
+	position: absolute;
+	top: 0px;
+	left: 200px;
+	height: 100%;
+	width: calc(100% - 200px);
+	display: none;
+}
