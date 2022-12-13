@@ -1,5 +1,5 @@
 <script>
-  let tabsandwebviews = [{ number: 1, webview: "" }];
+  let tabsandwebviews = [{ number: 1, tab: "", webview: "" }];
 
   let searchinput;
 
@@ -15,7 +15,7 @@
     tab.classList.add("active");
 
     if (webview.src !== "" && webview.src !== undefined) {
-      webview.style.display = "inline-flex";
+      webview.style.display = "flex";
     }
   }
 
@@ -47,6 +47,7 @@
         class="tab"
         id={"tab" + tabsandwebview.number}
         on:click={() => openTabAndIframe(tabsandwebview.number)}
+        bind:this={tabsandwebview.tab}
       >
         <img
           src={"https://s2.googleusercontent.com/s2/favicons?domain_url=" +
@@ -81,7 +82,7 @@
         url = "https://" + url;
 
       webview.src = url;
-      webview.style.display = "inline-flex";
+      webview.style.display = "flex";
     }}
   >
     <input
@@ -101,8 +102,11 @@
     id={tabsandwebview.number}
     on:did-finish-load={() => {
       searchinput = tabsandwebview.webview.src;
+      document.querySelector("#tab" + tabsandwebview.number + " p").innerHTML =
+        tabsandwebview.webview.getTitle();
       tabsandwebviews = tabsandwebviews;
     }}
+    plugins
   />
 {/each}
 
