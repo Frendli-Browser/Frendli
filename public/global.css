@@ -132,6 +132,7 @@ webview,
 	font-size: 2.5em;
 	margin: 0;
 	text-shadow: 2px 2px rgb(119 119 119 / 71%);
+	pointer-events: none;
 }
 
 #homepage>form {
@@ -162,8 +163,10 @@ webview,
 	background: #D9D9D9;
 	box-shadow: 2px 2px 5px 0px rgb(119 119 119 / 71%);
 	font-size: 20px;
+	cursor: pointer;
 }
 
 webview {
 	display: none;
+	background: white;
 }

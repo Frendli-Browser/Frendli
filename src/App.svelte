@@ -74,6 +74,8 @@
       let webview = document.querySelector("webview.active");
 
       let url = searchinput;
+      if (url == undefined) return;
+
       if (!isUrl(url)) url = "https://www.google.com/search?q=" + url;
       else if (!(url.startsWith("https://") || url.startsWith("http://")))
         url = "https://" + url;
@@ -94,21 +96,18 @@
 </div>
 
 {#each tabsandwebviews as tabsandwebview}
-  <webview bind:this={tabsandwebview.webview} id={tabsandwebview.number} />
+  <webview
+    bind:this={tabsandwebview.webview}
+    id={tabsandwebview.number}
+    on:did-finish-load={() => {
+      searchinput = tabsandwebview.webview.src;
+      tabsandwebviews = tabsandwebviews;
+    }}
+  />
 {/each}
 
 <svelte:window
   on:load={() => {
     openTabAndIframe(1);
-
-    setInterval(() => {
-      if (
-        document.querySelector("webview.active").src !== "" &&
-        document.querySelector("webview.active").src !== undefined
-      ) {
-        tabsandwebviews = tabsandwebviews;
-        searchinput = document.querySelector("webview.active").src;
-      }
-    }, 100);
   }}
 />
