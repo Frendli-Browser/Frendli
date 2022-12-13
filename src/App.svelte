@@ -1,19 +1,44 @@
 <script>
-  let tabsandwebviews = [
-    { number: 1, webview: "" },
-    { number: 2, webview: "" },
-  ];
-  function openTabAndIframe(tabsandwebview) {
-    document
-      .querySelectorAll("webview")
-      .forEach((elmnt) => (elmnt.className = ""));
-    document.getElementById(tabsandwebview).classList.add("active");
-    document
-      .querySelectorAll(".tab")
-      .forEach((elmnt) => (elmnt.className = "tab"));
-    document.getElementById("tab" + tabsandwebview).classList.add("active");
+  let tabsandwebviews = [{ number: 1, webview: "" }];
+
+  let searchinput;
+
+  function openTabAndIframe(number) {
+    let webviews = document.querySelectorAll("webview");
+    let webview = document.getElementById(number);
+    let tabs = document.querySelectorAll(".tab");
+    let tab = document.getElementById("tab" + number);
+
+    webviews.forEach((elmnt) => (elmnt.className = ""));
+    webview.classList.add("active");
+    tabs.forEach((elmnt) => (elmnt.className = "tab"));
+    tab.classList.add("active");
+
+    if (webview.src !== "" && webview.src !== undefined) {
+      webview.style.display = "inline-flex";
+    }
   }
+
+  function isUrl(val = "") {
+    if (
+      /^http(s?):\/\//.test(val) ||
+      (val.includes(".") && val.substr(0, 1) !== " ")
+    )
+      return true;
+    return false;
+  }
+
+  document.onreadystatechange = function () {
+    var state = document.readyState;
+    if (state == "complete") {
+      document.getElementById("loading").style.display = "none";
+    }
+  };
 </script>
+
+<div id="loading">
+  <object class="loadingimg" aria-label="Loading..." data="./loading.svg" />
+</div>
 
 <div id="sidebar">
   <div id="tabs">
@@ -40,6 +65,34 @@
   </div>
 </div>
 
+<div id="homepage">
+  <h1>
+    <span style="font-family: Norican;font-size: 1.5em;">F</span>rendli
+  </h1>
+  <form
+    on:submit|preventDefault={() => {
+      let webview = document.querySelector("webview.active");
+
+      let url = searchinput;
+      if (!isUrl(url)) url = "https://www.google.com/search?q=" + url;
+      else if (!(url.startsWith("https://") || url.startsWith("http://")))
+        url = "https://" + url;
+
+      webview.src = url;
+      webview.style.display = "inline-flex";
+    }}
+  >
+    <input
+      type="search"
+      placeholder="What do you want to know?"
+      bind:value={searchinput}
+    />
+    <button type="submit">
+      <i class="fa-solid fa-magnifying-glass" />
+    </button>
+  </form>
+</div>
+
 {#each tabsandwebviews as tabsandwebview}
   <webview bind:this={tabsandwebview.webview} id={tabsandwebview.number} />
 {/each}
@@ -49,8 +102,12 @@
     openTabAndIframe(1);
 
     setInterval(() => {
-      if (document.querySelector("webview.active").src !== "") {
+      if (
+        document.querySelector("webview.active").src !== "" &&
+        document.querySelector("webview.active").src !== undefined
+      ) {
         tabsandwebviews = tabsandwebviews;
+        searchinput = document.querySelector("webview.active").src;
       }
     }, 100);
   }}

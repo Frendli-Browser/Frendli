@@ -9,6 +9,36 @@ html {
 	position: relative;
 }
 
+@font-face {
+	font-family: 'Norican';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Norican'), url('./norican.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Segoe UI Variable';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Segoe UI Variable'), url('https://fonts.cdnfonts.com/s/63254/SegoeUIVF.woff') format('woff');
+}
+
+* {
+	font-family: Segoe UI Variable, Segoe UI;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+	-webkit-appearance: none;
+	appearance: none;
+	height: 1em;
+	width: 1em;
+	border-radius: 50em;
+	background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
+	background-size: contain;
+	opacity: .3;
+	pointer-events: all;
+}
+
 body {
 	width: 100%;
 	height: 100%;
@@ -18,6 +48,21 @@ body {
 	background-image: url(https://github.com/notAperson535/Win11-HTML/blob/main/img/backgroundlight.jpg?raw=true);
 	background-position: 50%;
 	background-size: cover;
+}
+
+#loading {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	align-items: center;
+	background-color: #020202;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	z-index: 99999999999999;
+	background: white;
 }
 
 #sidebar {
@@ -65,11 +110,60 @@ body {
 	margin: 0;
 }
 
-webview {
+webview,
+#homepage {
 	position: absolute;
 	top: 0px;
 	left: 200px;
 	height: 100%;
 	width: calc(100% - 200px);
+}
+
+#homepage {
+	background: rgba(233, 229, 229, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+#homepage>h1 {
+	color: rgb(250, 91, 41);
+	font-size: 2.5em;
+	margin: 0;
+	text-shadow: 2px 2px rgb(119 119 119 / 71%);
+}
+
+#homepage>form {
+	width: 40%;
+	height: 45px;
+	border-radius: 5px;
+	overflow: hidden;
+	box-shadow: 2px 2px 5px 0px rgb(119 119 119 / 71%);
+	display: flex;
+	align-items: center;
+	background: var(--intense-blur);
+	backdrop-filter: blur(12px);
+}
+
+#homepage>form>input {
+	outline: 0;
+	border: 0;
+	width: -webkit-fill-available;
+	height: 100%;
+	text-align: center;
+	background: none;
+}
+
+#homepage>form>button {
+	height: 100%;
+	border: none;
+	border-radius: 5px;
+	background: #D9D9D9;
+	box-shadow: 2px 2px 5px 0px rgb(119 119 119 / 71%);
+	font-size: 20px;
+}
+
+webview {
 	display: none;
 }
