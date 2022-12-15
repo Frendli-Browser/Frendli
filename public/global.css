@@ -65,15 +65,66 @@ body {
 	background: white;
 }
 
+#topbar {
+	position: relative;
+	height: 40px;
+	display: flex;
+	width: 100%;
+	padding: 5px;
+	box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.75);
+	backdrop-filter: blur(12px);
+	-webkit-app-region: drag;
+}
+
+#windowcontrols {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	right: 0;
+	top: 0;
+	-webkit-app-region: no-drag;
+}
+
+#windowcontrols>button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	user-select: none;
+	background: none;
+	border: none;
+	padding: 0px 15px;
+	box-sizing: border-box;
+}
+
+#windowcontrols>button:hover {
+	background: rgba(0, 0, 0, 0.1);
+}
+
+#closebutton:hover {
+	background: #E81123 !important;
+}
+
+#closebutton:hover>svg {
+	color: white;
+}
+
+#windowcontrols>button>svg {
+	width: 15px;
+}
+
 #sidebar {
 	width: 200px;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 	padding: 20px;
+	padding-top: 10px;
 	box-sizing: border-box;
-	background: var(--intense-blur);
-	backdrop-filter: saturate(3) blur(20px);
+	background: rgba(255, 255, 255, 0.75);
+	backdrop-filter: blur(12px);
 }
 
 #tabs {
@@ -94,6 +145,8 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 5px;
+	position: relative;
+	overflow: hidden;
 }
 
 .tab.active {
@@ -104,18 +157,24 @@ body {
 
 .tabfavicon {
 	width: 20px;
+	pointer-events: none;
 }
 
 .tab>p {
+	position: relative;
 	margin: 0;
+	display: inline;
+	white-space: nowrap;
+	overflow: hidden;
+	pointer-events: none;
 }
 
 webview,
 #homepage {
 	position: absolute;
-	top: 0px;
+	top: 40px;
 	left: 200px;
-	height: 100%;
+	height: calc(100% - 40px);
 	width: calc(100% - 200px);
 }
 
@@ -133,6 +192,7 @@ webview,
 	margin: 0;
 	text-shadow: 2px 2px rgb(119 119 119 / 71%);
 	pointer-events: none;
+	user-select: none;
 }
 
 #homepage>form {

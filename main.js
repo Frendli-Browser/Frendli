@@ -1,9 +1,14 @@
+const { NONAME } = require('dns')
 const electron = require('electron')
 // Module to control application life.
 // const app = electron.app
-const { app, BrowserView, BrowserWindow } = require('electron')
+const { app, BrowserView, BrowserWindow, ipcMain } = require('electron')
 // Module to create native browser window.
 // const BrowserWindow = electron.BrowserWindow
+
+try {
+  require('electron-reloader')(module);
+} catch (_) { }
 
 const path = require('path')
 const url = require('url')
@@ -17,9 +22,12 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
+    frame: false,
+    backgroundColor: '#fff',
 
     webPreferences: {
-      webviewTag: true
+      webviewTag: true,
+      preload: path.join(app.getAppPath(), 'preload.js')
     }
   })
 
@@ -30,8 +38,36 @@ function createWindow() {
     slashes: true
   }))
 
+  ipcMain.on("minimize", () => {
+    mainWindow.minimize();
+  })
+
+  ipcMain.on("maximize", () => {
+    mainWindow.maximize();
+  })
+
+  ipcMain.on("restore", () => {
+    mainWindow.unmaximize();
+  })
+
+  ipcMain.on("close", () => {
+    mainWindow.close();
+  })
+
+  async function isWindowMaximized() {
+
+    if (mainWindow.isMaximized()) {
+      return "true"
+    }
+    else {
+      return "false"
+    }
+  }
+
+  ipcMain.handle("iswindowmaximized", () => isWindowMaximized())
+
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

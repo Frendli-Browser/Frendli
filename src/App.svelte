@@ -1,4 +1,6 @@
 <script>
+  import WindowControls from "./windowcontrols.svelte";
+
   let tabsandwebviews = [{ number: 1, tab: "", webview: "" }];
 
   let searchinput;
@@ -40,6 +42,12 @@
   <object class="loadingimg" aria-label="Loading..." data="./loading.svg" />
 </div>
 
+<div id="topbar">
+  <div id="windowcontrols">
+    <WindowControls />
+  </div>
+</div>
+
 <div id="sidebar">
   <div id="tabs">
     {#each tabsandwebviews as tabsandwebview, i (tabsandwebview.number)}
@@ -60,7 +68,7 @@
           alt="favicon"
           class="tabfavicon"
         />
-        <p>Tab</p>
+        <p>New Tab</p>
       </button>
     {/each}
   </div>
