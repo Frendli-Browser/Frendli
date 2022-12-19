@@ -230,3 +230,34 @@ webview {
 	display: none;
 	background: white;
 }
+
+#urlhover {
+	position: absolute;
+	bottom: 10px;
+	left: 210px;
+	width: fit-content;
+	height: fit-content;
+	background: var(--intense-blur);
+	backdrop-filter: blur(20px);
+	border-radius: 5px;
+	padding: 5px;
+	box-sizing: border-box;
+	display: none;
+	font-size: .75rem;
+	box-shadow: 2px 2px 5px -4px rgb(119 119 119 / 71%);
+	animation: fadein .25s;
+}
+
+@keyframes fadein {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+#urlhover>p {
+	margin: 0px;
+}
