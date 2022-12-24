@@ -80,7 +80,7 @@
       let url = searchinput;
       if (url == undefined) return;
 
-      if (!isUrl(url)) url = "https://www.google.com/search?q=" + url;
+      if (!isUrl(url)) url = "https://search.brave.com/search?q=" + url;
       else if (!(url.startsWith("https://") || url.startsWith("http://")))
         url = "https://" + url;
 
