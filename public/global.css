@@ -112,6 +112,7 @@ body {
 
 #windowcontrols>button>svg {
 	width: 15px;
+	height: 15px;
 }
 
 #sidebar {
