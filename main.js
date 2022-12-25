@@ -6,11 +6,15 @@ const { app, BrowserView, BrowserWindow, ipcMain } = require('electron')
 // Module to create native browser window.
 // const BrowserWindow = electron.BrowserWindow
 
+const wallpaper = require("wallpaper");
+const sharp = require("sharp");
+
 try {
   require('electron-reloader')(module);
 } catch (_) { }
 
 const path = require('path')
+const iconPath = path.join(__dirname, "public", "favicon.png");
 const url = require('url')
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -20,6 +24,7 @@ let mainWindow
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    icon: iconPath,
     width: 1000,
     height: 800,
     frame: false,
@@ -66,8 +71,16 @@ function createWindow() {
 
   ipcMain.handle("iswindowmaximized", () => isWindowMaximized())
 
+  async function getDesktopBackground() {
+    const wallPath = await wallpaper.get();
+
+    sharp(wallPath).blur(100).toFile("public/background.webp")
+  }
+
+  getDesktopBackground()
+
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

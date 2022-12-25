@@ -1,9 +1,4 @@
 
-// window.minimizeWindow = function () {
-//     win.minimize()
-// }
-
-
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('windowcontrols', {
@@ -14,3 +9,5 @@ contextBridge.exposeInMainWorld('windowcontrols', {
     // isMaximized: await window.windowcontrols.maximize(),
     isMaximized: () => ipcRenderer.invoke('iswindowmaximized'),
 })
+
+contextBridge.exposeInMainWorld('background', { background: () => ipcRenderer.invoke('getdesktopbackground') })
