@@ -43,6 +43,10 @@
 </div>
 
 <div id="topbar">
+  <div id="webviewnavigation">
+    <button>
+    <i class="fa-solid fa-caret-left" onclick=""></i>
+  </div>
   <div id="windowcontrols">
     <WindowControls />
   </div>
