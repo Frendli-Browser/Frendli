@@ -23,9 +23,9 @@
     "electron": "^22.0.0",
     "electron-reloader": "^1.2.3",
     "path": "^0.12.7",
+    "sharp": "^0.31.1",
     "sirv-cli": "^2.0.0",
     "url": "^0.11.0",
-    "wallpaper": "^5.0.1",
-    "sharp": "^0.31.1"
+    "wallpaper": "^5.0.1"
   }
 }

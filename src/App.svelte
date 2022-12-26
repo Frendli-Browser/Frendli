@@ -91,6 +91,8 @@
       else if (!(url.startsWith("https://") || url.startsWith("http://")))
         url = "https://" + url;
 
+      if (url.startsWith("http://")) url.replace("http://", "https://");
+
       webview.loadURL(url);
       webview.style.display = "flex";
     }}
@@ -121,8 +123,9 @@
     on:did-frame-finish-load={() => {
       if (!event.target.src.includes("dummyurl")) {
         tabandwebview.tabfavicon.src =
-          "https://s2.googleusercontent.com/s2/favicons?domain_url=" +
-          event.target.src;
+          // "https://s2.googleusercontent.com/s2/favicons?domain_url=" +
+          "http://democratic-gray-boar.faviconkit.com/" +
+          event.target.src.replace("https://", "");
       }
     }}
     on:update-target-url={(event) => {
