@@ -48,8 +48,9 @@
 
 <div id="topbar">
   <div id="webviewnavigation">
-    <button>
-    <i class="fa-solid fa-caret-left" onclick=""></i>
+    <button on:click={() => document.querySelector("webview.active").goBack()}>
+      <i class="fa-solid fa-caret-left" />
+    </button>
   </div>
   <div id="windowcontrols">
     <WindowControls />
