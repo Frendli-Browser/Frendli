@@ -3,7 +3,7 @@
 
   let tabsandwebviews = [{ number: 1, tab: "", tabfavicon: "", webview: "" }];
 
-  let searchinput, currenturlhovered;
+  let homepageurl, urlbarurl, currenturlhovered;
 
   function openTabAndIframe(number) {
     let webviews = document.querySelectorAll("webview");
@@ -23,6 +23,23 @@
     ) {
       webview.style.display = "flex";
     }
+  }
+
+  function go(url) {
+    let webview = document.querySelector("webview.active");
+
+    homepageurl = url;
+    if (url == undefined) return;
+    if (url == "") return;
+
+    if (!isUrl(url)) url = "https://search.brave.com/search?q=" + url;
+    else if (!(url.startsWith("https://") || url.startsWith("http://")))
+      url = "https://" + url;
+
+    if (url.startsWith("http://")) url.replace("http://", "https://");
+
+    webview.loadURL(url);
+    webview.style.display = "flex";
   }
 
   function isUrl(val = "") {
@@ -52,6 +69,11 @@
       <i class="fa-solid fa-caret-left" />
     </button>
   </div>
+
+  <form on:submit|preventDefault={() => go(urlbarurl)} id="urlbar">
+    <input bind:value={urlbarurl} type="text" />
+  </form>
+
   <div id="windowcontrols">
     <WindowControls />
   </div>
@@ -82,27 +104,11 @@
   <h1>
     <span style="font-family: Norican;font-size: 1.5em;">F</span>rendli
   </h1>
-  <form
-    on:submit|preventDefault={() => {
-      let webview = document.querySelector("webview.active");
-
-      let url = searchinput;
-      if (url == undefined) return;
-
-      if (!isUrl(url)) url = "https://search.brave.com/search?q=" + url;
-      else if (!(url.startsWith("https://") || url.startsWith("http://")))
-        url = "https://" + url;
-
-      if (url.startsWith("http://")) url.replace("http://", "https://");
-
-      webview.loadURL(url);
-      webview.style.display = "flex";
-    }}
-  >
+  <form on:submit|preventDefault={() => go(homepageurl)}>
     <input
       type="search"
       placeholder="What do you want to know?"
-      bind:value={searchinput}
+      bind:value={homepageurl}
     />
     <button type="submit">
       <i class="fa-solid fa-magnifying-glass" />
@@ -119,12 +125,12 @@
         event.target.style.display = "none";
         document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
           "New Tab";
-        searchinput = "";
+        homepageurl = "";
         tabandwebview.tabfavicon.src = "./newtab.png";
       } else {
         document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
           event.target.getTitle();
-        searchinput = event.target.src;
+        homepageurl = event.target.src;
         tabandwebview.tabfavicon.src = "./loadingfavicon.svg";
       }
     }}

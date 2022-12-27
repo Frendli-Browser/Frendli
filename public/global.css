@@ -76,7 +76,7 @@ body {
 	-webkit-app-region: drag;
 }
 
-#webviewnavigation {
+#topbar * {
 	-webkit-app-region: no-drag;
 }
 
@@ -87,7 +87,6 @@ body {
 	position: absolute;
 	right: 0;
 	top: 0;
-	-webkit-app-region: no-drag;
 }
 
 #windowcontrols>button {
