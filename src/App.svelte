@@ -49,7 +49,8 @@
 <div id="topbar">
   <div id="webviewnavigation">
     <button>
-    <i class="fa-solid fa-caret-left" onclick=""></i>
+      <i class="fa-solid fa-caret-left" onclick="" />
+    </button>
   </div>
   <div id="windowcontrols">
     <WindowControls />
@@ -138,9 +139,6 @@
         urlhoverdiv.style.display = "initial";
         currenturlhovered = event.url;
       }
-    }}
-    on:new-window={(event) => {
-      console.log(event);
     }}
     plugins
   />
