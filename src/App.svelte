@@ -122,10 +122,11 @@
     }}
     on:did-frame-finish-load={() => {
       if (!event.target.src.includes("dummyurl")) {
+        let faviconurl = event.target.src.replace("https://", "");
         tabandwebview.tabfavicon.src =
           // "https://s2.googleusercontent.com/s2/favicons?domain_url=" +
           "http://democratic-gray-boar.faviconkit.com/" +
-          event.target.src.replace("https://", "");
+          faviconurl.split("/")[0];
       }
     }}
     on:update-target-url={(event) => {
@@ -137,6 +138,9 @@
         urlhoverdiv.style.display = "initial";
         currenturlhovered = event.url;
       }
+    }}
+    on:new-window={(event) => {
+      console.log(event);
     }}
     plugins
   />
