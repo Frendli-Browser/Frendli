@@ -19,7 +19,7 @@
     if (
       webview.src !== "" &&
       webview.src !== undefined &&
-      !webview.src.includes("dummyurl")
+      !webview.src.includes("dummypage.html")
     ) {
       webview.style.display = "flex";
     }
@@ -68,6 +68,7 @@
       >
         <img
           alt="favicon"
+          src="./newtab.png"
           class="tabfavicon"
           bind:this={tabandwebview.tabfavicon}
         />
@@ -111,10 +112,16 @@
 
 {#each tabsandwebviews as tabandwebview}
   <webview
-    src="dummyurl"
+    src="dummypage.html"
     id={tabandwebview.number}
     on:dom-ready={(event) => {
-      if (!event.target.src.includes("dummyurl")) {
+      if (event.target.src.includes("dummypage.html")) {
+        event.target.style.display = "none";
+        document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
+          "New Tab";
+        searchinput = "";
+        tabandwebview.tabfavicon.src = "./newtab.png";
+      } else {
         document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
           event.target.getTitle();
         searchinput = event.target.src;
@@ -122,7 +129,7 @@
       }
     }}
     on:did-frame-finish-load={() => {
-      if (!event.target.src.includes("dummyurl")) {
+      if (!event.target.src.includes("dummypage.html")) {
         let faviconurl = event.target.src.replace("https://", "");
         tabandwebview.tabfavicon.src =
           // "https://s2.googleusercontent.com/s2/favicons?domain_url=" +

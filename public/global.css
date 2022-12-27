@@ -76,6 +76,10 @@ body {
 	-webkit-app-region: drag;
 }
 
+#webviewnavigation {
+	-webkit-app-region: no-drag;
+}
+
 #windowcontrols {
 	height: 100%;
 	display: flex;
