@@ -140,9 +140,6 @@
         currenturlhovered = event.url;
       }
     }}
-    on:new-window={(event) => {
-      console.log(event);
-    }}
     plugins
   />
 {/each}
