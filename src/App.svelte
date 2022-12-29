@@ -68,6 +68,12 @@
     <button on:click={() => document.querySelector("webview.active").goBack()}>
       <i class="fa-solid fa-caret-left" />
     </button>
+    <button on:click={() => document.querySelector("webview.active").reload()}>
+      <i class="fa-solid fa-rotate-right" />
+    </button>
+    <button on:click={() => document.querySelector("webview.active").reload()}>
+      <i class="fa-solid fa-caret-right" />
+    </button>
   </div>
 
   <form on:submit|preventDefault={() => go(urlbarurl)} id="urlbar">
