@@ -82,6 +82,13 @@ body {
 	-webkit-app-region: no-drag;
 }
 
+#webviewnavigation {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .25em;
+}
+
 #urlbar {
 	height: 100%;
 	width: -webkit-fill-available;
