@@ -1,7 +1,15 @@
 <script>
   import WindowControls from "./windowcontrols.svelte";
 
-  let tabsandwebviews = [{ number: 1, tab: "", tabfavicon: "", webview: "" }];
+  let tabsandwebviews = [
+    {
+      number: 1,
+      tab: "",
+      tabfavicon: "",
+      webview: "",
+      alreadydummypage: false,
+    },
+  ];
 
   let homepageurl, urlbarurl, currenturlhovered;
 
@@ -82,7 +90,10 @@
       <i class="fa-solid fa-rotate-right" />
     </button>
     <button
-      on:click={() => document.querySelector("webview.active").goForward()}
+      on:click={() => {
+        document.querySelector("webview.active").goForward();
+        document.querySelector("webview.active").style.display = "flex";
+      }}
     >
       <i id="forward" class="fa-solid fa-caret-right" />
     </button>
@@ -161,8 +172,12 @@
     src="dummypage.html"
     id={tabandwebview.number}
     plugins
-    on:dom-ready={(event) => {
-      if (event.target.src.includes("dummypage.html")) {
+    on:load-commit={(event) => {
+      if (
+        event.target.src.includes("dummypage.html") &&
+        tabandwebview.alreadydummypage == false
+      ) {
+        tabandwebview.alreadydummypage = true;
         event.target.style.display = "none";
         document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
           "New Tab";
@@ -170,10 +185,17 @@
         urlbarurl = "";
         tabandwebview.tabfavicon.src = "./newtab.png";
       } else {
-        document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
-          event.target.getTitle();
-        homepageurl = event.target.src;
-        urlbarurl = event.target.src;
+        tabandwebview.alreadydummypage = false;
+        event.target.style.display = "flex";
+        function checkURL() {
+          if (event.target.src.includes("dummypage.html")) {
+            window.setTimeout(checkURL, 100);
+          } else {
+            homepageurl = event.target.src;
+            urlbarurl = event.target.src;
+          }
+        }
+        checkURL();
         tabandwebview.tabfavicon.src = "./loadingfavicon.svg";
       }
       if (event.target.canGoBack() == true) {
@@ -192,7 +214,7 @@
       }
     }}
     on:did-frame-finish-load={() => {
-      if (!event.target.src.includes("dummypage.html")) {
+      if (tabandwebview.alreadydummypage == false) {
         let faviconurl = event.target.src.replace("https://", "");
         tabandwebview.tabfavicon.src =
           // "https://s2.googleusercontent.com/s2/favicons?domain_url=" +
@@ -200,6 +222,9 @@
           faviconurl.split("/")[0];
       }
     }}
+    on:page-title-updated={(event) =>
+      (document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
+        event.title)}
     on:update-target-url={(event) => {
       let urlhoverdiv = document.querySelector("#urlhover");
 
