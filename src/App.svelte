@@ -6,23 +6,21 @@
   let homepageurl, urlbarurl, currenturlhovered;
 
   function openTabAndIframe(number) {
-    let webviews = document.querySelectorAll("webview");
-    let webview = document.getElementById(number);
-    let tabs = document.querySelectorAll(".tab");
-    let tab = document.getElementById("tab" + number);
-
-    webviews.forEach((elmnt) => (elmnt.className = ""));
-    webview.classList.add("active");
-    tabs.forEach((elmnt) => (elmnt.className = "tab"));
-    tab.classList.add("active");
-
-    if (
-      webview.src !== "" &&
-      webview.src !== undefined &&
-      !webview.src.includes("dummypage.html")
-    ) {
-      webview.style.display = "flex";
-    }
+    // let webviews = document.querySelectorAll("webview");
+    // let webview = document.getElementById(number);
+    // let tabs = document.querySelectorAll(".tab");
+    // let tab = document.getElementById("tab" + number);
+    // webviews.forEach((elmnt) => (elmnt.className = ""));
+    // webview.classList.add("active");
+    // tabs.forEach((elmnt) => (elmnt.className = "tab"));
+    // tab.classList.add("active");
+    // if (
+    //   webview.src !== "" &&
+    //   webview.src !== undefined &&
+    //   !webview.src.includes("dummypage.html")
+    // ) {
+    //   webview.style.display = "flex";
+    // }
   }
 
   function go(url) {
@@ -59,6 +57,16 @@
       document.getElementById("loading").style.display = "none";
     }
   };
+
+  api.handle(
+    "new-tab-url",
+    (event, data) =>
+      function (event, data) {
+        // document.getElementById('newtabbutton').click();
+        go(data);
+      },
+    event
+  );
 </script>
 
 <div id="loading">
@@ -97,7 +105,25 @@
       <button
         class="tab"
         id={"tab" + tabandwebview.number}
-        on:click={() => openTabAndIframe(tabandwebview.number)}
+        on:click={(event) => {
+          let webviews = document.querySelectorAll("webview");
+          let webview = document.getElementById(tabandwebview.number);
+          let tabs = document.querySelectorAll(".tab");
+          let tab = event.target;
+
+          webviews.forEach((elmnt) => (elmnt.className = ""));
+          webview.classList.add("active");
+          tabs.forEach((elmnt) => (elmnt.className = "tab"));
+          tab.classList.add("active");
+
+          if (
+            webview.src !== "" &&
+            webview.src !== undefined &&
+            !webview.src.includes("dummypage.html")
+          ) {
+            webview.style.display = "flex";
+          }
+        }}
         bind:this={tabandwebview.tab}
       >
         <img
@@ -132,7 +158,6 @@
   <webview
     src="dummypage.html"
     id={tabandwebview.number}
-    webreferences="nativeWindowOpen = no"
     plugins
     on:dom-ready={(event) => {
       if (event.target.src.includes("dummypage.html")) {
@@ -190,6 +215,6 @@
 
 <svelte:window
   on:load={() => {
-    openTabAndIframe(1);
+    document.querySelector("#tab1").click();
   }}
 />

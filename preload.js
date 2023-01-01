@@ -10,4 +10,7 @@ contextBridge.exposeInMainWorld('windowcontrols', {
     isMaximized: () => ipcRenderer.invoke('iswindowmaximized'),
 })
 
-contextBridge.exposeInMainWorld('background', { background: () => ipcRenderer.invoke('getdesktopbackground') })
+contextBridge.exposeInMainWorld('api', {
+    send: (channel, data) => ipcRenderer.invoke(channel, data),
+    handle: (channel, callable, event, data) => ipcRenderer.on(channel, callable(event, data))
+})

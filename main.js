@@ -1,10 +1,5 @@
 const { NONAME } = require('dns')
-const electron = require('electron')
-// Module to control application life.
-// const app = electron.app
-const { app, BrowserView, BrowserWindow, ipcMain } = require('electron')
-// Module to create native browser window.
-// const BrowserWindow = electron.BrowserWindow
+const { app, BrowserWindow, ipcMain } = require('electron')
 
 const wallpaper = require("wallpaper");
 const sharp = require("sharp");
@@ -42,6 +37,13 @@ function createWindow() {
     protocol: 'file:',
     slashes: true
   }))
+
+  mainWindow.webContents.on("did-attach-webview", (_, contents) => {
+    contents.setWindowOpenHandler((details) => {
+      mainWindow.webContents.send('new-tab-url', details.url);
+      return { action: 'deny' }
+    })
+  })
 
   ipcMain.on("minimize", () => {
     mainWindow.minimize();
