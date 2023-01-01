@@ -6,7 +6,6 @@ contextBridge.exposeInMainWorld('windowcontrols', {
     maximize: () => ipcRenderer.send("maximize"),
     restore: () => ipcRenderer.send("restore"),
     close: () => ipcRenderer.send("close"),
-    // isMaximized: await window.windowcontrols.maximize(),
     isMaximized: () => ipcRenderer.invoke('iswindowmaximized'),
 })
 

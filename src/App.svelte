@@ -81,7 +81,9 @@
     <button on:click={() => document.querySelector("webview.active").reload()}>
       <i class="fa-solid fa-rotate-right" />
     </button>
-    <button on:click={() => document.querySelector("webview.active").goForward()}>
+    <button
+      on:click={() => document.querySelector("webview.active").goForward()}
+    >
       <i id="forward" class="fa-solid fa-caret-right" />
     </button>
   </div>
@@ -176,13 +178,17 @@
       }
       if (event.target.canGoBack() == true) {
         document.getElementById("back").style.color = "black";
-      } else{
+        document.getElementById("back").classList.add("active");
+      } else {
         document.getElementById("back").style.color = "lightgrey";
+        document.getElementById("back").classList.remove("active");
       }
       if (event.target.canGoForward() == true) {
         document.getElementById("forward").style.color = "black";
-      } else{
+        document.getElementById("forward").classList.add("active");
+      } else {
         document.getElementById("forward").style.color = "lightgrey";
+        document.getElementById("forward").classList.remove("active");
       }
     }}
     on:did-frame-finish-load={() => {

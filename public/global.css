@@ -1,6 +1,6 @@
 :root {
-	--intense-blur: rgba(255, 255, 255, 0.8);
-	--lighter-blur: rgba(255, 255, 255, 0.5);
+	--intense-blur: rgba(243, 243, 243, 0.8);
+	--lighter-blur: rgba(251, 251, 251, 0.5);
 }
 
 html {
@@ -69,6 +69,7 @@ body {
 	height: 40px;
 	display: flex;
 	align-items: center;
+	gap: 5px;
 	width: 100%;
 	padding: 5px;
 	background: rgba(251, 251, 251, 0.5);
@@ -87,6 +88,21 @@ body {
 	align-items: center;
 	justify-content: center;
 	gap: .25em;
+	height: 100%;
+}
+
+#webviewnavigation>button {
+	background: none;
+	border: none;
+}
+
+#back,
+#forward {
+	color: lightgrey;
+}
+
+#webviewnavigation>button:has(i.active):hover {
+	background: rgba(211, 211, 211, 0.8);
 }
 
 #urlbar {
@@ -252,15 +268,6 @@ webview,
 	box-shadow: 2px 2px 5px 0px rgb(119 119 119 / 71%);
 	font-size: 20px;
 	cursor: pointer;
-}
-
-#back, #forward{
-	color: lightgrey;
-}
-
-button{
-	background-color: none;
-	border: none;
 }
 
 webview {
