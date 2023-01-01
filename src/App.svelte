@@ -66,13 +66,13 @@
 <div id="topbar">
   <div id="webviewnavigation">
     <button on:click={() => document.querySelector("webview.active").goBack()}>
-      <i class="fa-solid fa-caret-left" />
+      <i id="back" class="fa-solid fa-caret-left" />
     </button>
     <button on:click={() => document.querySelector("webview.active").reload()}>
       <i class="fa-solid fa-rotate-right" />
     </button>
-    <button on:click={() => document.querySelector("webview.active").reload()}>
-      <i class="fa-solid fa-caret-right" />
+    <button on:click={() => document.querySelector("webview.active").goForward()}>
+      <i id="forward" class="fa-solid fa-caret-right" />
     </button>
   </div>
 
@@ -138,6 +138,16 @@
           event.target.getTitle();
         homepageurl = event.target.src;
         tabandwebview.tabfavicon.src = "./loadingfavicon.svg";
+      }
+      if (event.target.canGoBack() == true) {
+        document.getElementById("back").style.color = "black";
+      } else{
+        document.getElementById("back").style.color = "lightgrey";
+      }
+      if (event.target.canGoForward() == true) {
+        document.getElementById("forward").style.color = "black";
+      } else{
+        document.getElementById("forward").style.color = "lightgrey";
       }
     }}
     on:did-frame-finish-load={() => {

@@ -228,6 +228,15 @@ webview,
 	cursor: pointer;
 }
 
+#back, #forward{
+	color: lightgrey;
+}
+
+button{
+	background-color: none;
+	border: none;
+}
+
 webview {
 	display: none;
 	background: white;
