@@ -28,7 +28,6 @@
   function go(url) {
     let webview = document.querySelector("webview.active");
 
-    homepageurl = url;
     if (url == undefined) return;
     if (url == "") return;
 
@@ -37,6 +36,9 @@
       url = "https://" + url;
 
     if (url.startsWith("http://")) url.replace("http://", "https://");
+
+    homepageurl = url;
+    urlbarurl = url;
 
     webview.loadURL(url);
     webview.style.display = "flex";
@@ -77,7 +79,11 @@
   </div>
 
   <form on:submit|preventDefault={() => go(urlbarurl)} id="urlbar">
-    <input bind:value={urlbarurl} type="text" />
+    <input
+      bind:value={urlbarurl}
+      type="text"
+      placeholder="What do you want to know?"
+    />
   </form>
 
   <div id="windowcontrols">
@@ -113,7 +119,7 @@
   <form on:submit|preventDefault={() => go(homepageurl)}>
     <input
       type="search"
-      placeholder="What do you want to know?"
+      placeholder="Learn something new today"
       bind:value={homepageurl}
     />
     <button type="submit">
@@ -126,17 +132,21 @@
   <webview
     src="dummypage.html"
     id={tabandwebview.number}
+    webreferences="nativeWindowOpen = no"
+    plugins
     on:dom-ready={(event) => {
       if (event.target.src.includes("dummypage.html")) {
         event.target.style.display = "none";
         document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
           "New Tab";
         homepageurl = "";
+        urlbarurl = "";
         tabandwebview.tabfavicon.src = "./newtab.png";
       } else {
         document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
           event.target.getTitle();
         homepageurl = event.target.src;
+        urlbarurl = event.target.src;
         tabandwebview.tabfavicon.src = "./loadingfavicon.svg";
       }
       if (event.target.canGoBack() == true) {
@@ -169,7 +179,6 @@
         currenturlhovered = event.url;
       }
     }}
-    plugins
   />
 {/each}
 
