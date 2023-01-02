@@ -1,18 +1,30 @@
 <script>
-  let maximizebutton, restorebutton;
+  let maximizebutton, restorebutton, yeet;
 
-  const checkWindowMaximized = async () => {
-    const response = await window.windowcontrols.isMaximized();
-    if (response == "true") {
-      maximizebutton.style.display = "none";
-      restorebutton.style.display = "flex";
-    }
-  };
+  window.api.handle(
+    "is-window-maximized",
+    (event, data) =>
+      function (event, data) {
+        if (data == true) {
+          maximizebutton.style.display = "none";
+          restorebutton.style.display = "flex";
+        }
+      },
+    event
+  );
 
-  checkWindowMaximized();
+  window.api.handle(
+    "unmaximize",
+    (event, data) =>
+      function (event, data) {
+        maximizebutton.style.display = "flex";
+        restorebutton.style.display = "none";
+      },
+    event
+  );
 </script>
 
-<button on:click={() => window.windowcontrols.minimize()} id="minimizebutton">
+<button on:click={() => window.api.send("minimize")} id="minimizebutton">
   <svg
     width="512"
     height="512"
@@ -37,7 +49,7 @@
 
 <button
   on:click={() => {
-    window.windowcontrols.maximize();
+    window.api.send("maximize");
     maximizebutton.style.display = "none";
     restorebutton.style.display = "flex";
   }}
@@ -458,7 +470,7 @@
 
 <button
   on:click={() => {
-    window.windowcontrols.restore();
+    window.api.send("restore");
     restorebutton.style.display = "none";
     maximizebutton.style.display = "flex";
   }}
@@ -500,7 +512,7 @@
   >
 </button>
 
-<button on:click={() => window.windowcontrols.close()} id="closebutton">
+<button on:click={() => window.api.send("close")} id="closebutton">
   <svg
     width="512"
     height="512"
@@ -606,3 +618,9 @@
     /></svg
   >
 </button>
+
+<svelte:window
+  on:load={() => {
+    window.api.send("check-window-maximized");
+  }}
+/>

@@ -66,7 +66,7 @@
     }
   };
 
-  api.handle(
+  window.api.handle(
     "new-tab-url",
     (event, data) =>
       function (event, data) {

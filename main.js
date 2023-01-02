@@ -1,5 +1,6 @@
 const { NONAME } = require('dns')
 const { app, BrowserWindow, ipcMain } = require('electron')
+const currentWindow = BrowserWindow.getFocusedWindow();
 
 const wallpaper = require("wallpaper");
 const sharp = require("sharp");
@@ -45,33 +46,36 @@ function createWindow() {
     })
   })
 
-  ipcMain.on("minimize", () => {
+  ipcMain.handle("minimize", () => {
     mainWindow.minimize();
   })
 
-  ipcMain.on("maximize", () => {
+  ipcMain.handle("maximize", () => {
     mainWindow.maximize();
   })
 
-  ipcMain.on("restore", () => {
+  ipcMain.handle("restore", () => {
     mainWindow.unmaximize();
   })
 
-  ipcMain.on("close", () => {
+  ipcMain.handle("close", () => {
     mainWindow.close();
   })
 
-  async function isWindowMaximized() {
-
+  ipcMain.handle('check-window-maximized', async (event, data) => {
     if (mainWindow.isMaximized()) {
-      return "true"
+      mainWindow.webContents.send("is-window-maximized", true)
     }
     else {
-      return "false"
+      mainWindow.webContents.send("is-window-maximized", false)
     }
-  }
+  })
 
-  ipcMain.handle("iswindowmaximized", () => isWindowMaximized())
+  mainWindow.on('move', function () {
+    if (mainWindow.isMaximized() == false) {
+      mainWindow.webContents.send("unmaximize")
+    }
+  });
 
   async function getDesktopBackground() {
     const wallPath = await wallpaper.get();
