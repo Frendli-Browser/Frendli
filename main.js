@@ -1,6 +1,6 @@
-const { NONAME } = require('dns')
 const { app, BrowserWindow, ipcMain } = require('electron')
 const currentWindow = BrowserWindow.getFocusedWindow();
+require('update-electron-app')()
 
 const wallpaper = require("wallpaper");
 const sharp = require("sharp");

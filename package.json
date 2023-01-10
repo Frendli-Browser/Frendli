@@ -3,12 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frendli-browser/frendli"
+  },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "electron ."
+    "start": "electron .",
+    "publish": "electron-forge publish"
   },
   "devDependencies": {
+    "@electron-forge/publisher-github": "^6.0.4",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "electron": "^22.0.0",
@@ -25,6 +31,7 @@
     "path": "^0.12.7",
     "sharp": "^0.31.1",
     "sirv-cli": "^2.0.0",
+    "update-electron-app": "^2.0.1",
     "url": "^0.11.0",
     "wallpaper": "^5.0.1"
   }
