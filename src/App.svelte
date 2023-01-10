@@ -1,35 +1,14 @@
 <script>
   import WindowControls from "./windowcontrols.svelte";
 
-  let tabsandwebviews = [
-    {
-      number: 1,
-      tab: "",
-      tabfavicon: "",
-      webview: "",
-      alreadydummypage: false,
-    },
-  ];
+  let nextid = 1,
+    newnextid;
+  let isnewtablink = false;
+  let newtablinkstr = "";
+
+  let tabsandwebviews = [];
 
   let homepageurl, urlbarurl, currenturlhovered;
-
-  function openTabAndIframe(number) {
-    // let webviews = document.querySelectorAll("webview");
-    // let webview = document.getElementById(number);
-    // let tabs = document.querySelectorAll(".tab");
-    // let tab = document.getElementById("tab" + number);
-    // webviews.forEach((elmnt) => (elmnt.className = ""));
-    // webview.classList.add("active");
-    // tabs.forEach((elmnt) => (elmnt.className = "tab"));
-    // tab.classList.add("active");
-    // if (
-    //   webview.src !== "" &&
-    //   webview.src !== undefined &&
-    //   !webview.src.includes("dummypage.html")
-    // ) {
-    //   webview.style.display = "flex";
-    // }
-  }
 
   function go(url) {
     let webview = document.querySelector("webview.active");
@@ -70,8 +49,9 @@
     "new-tab-url",
     (event, data) =>
       function (event, data) {
-        // document.getElementById('newtabbutton').click();
-        go(data);
+        isnewtablink = true;
+        newtablinkstr = data;
+        document.getElementById("newtabbutton").click();
       },
     event
   );
@@ -124,10 +104,16 @@
           let tabs = document.querySelectorAll(".tab");
           let tab = event.target;
 
-          webviews.forEach((elmnt) => (elmnt.className = ""));
+          webviews.forEach((elmnt) => {
+            elmnt.className = "";
+            elmnt.style.display = "none";
+          });
           webview.classList.add("active");
           tabs.forEach((elmnt) => (elmnt.className = "tab"));
           tab.classList.add("active");
+
+          homepageurl = tabandwebview.webview.src;
+          urlbarurl = tabandwebview.webview.src;
 
           if (
             webview.src !== "" &&
@@ -149,6 +135,39 @@
       </button>
     {/each}
   </div>
+  <button
+    id="newtabbutton"
+    on:click={() => {
+      let newtabsandwebviews = [
+        ...tabsandwebviews,
+        {
+          number: nextid,
+          tab: "",
+          tabfavicon: "",
+          webview: "",
+          alreadydummypage: false,
+        },
+      ];
+
+      newnextid = nextid;
+
+      tabsandwebviews = newtabsandwebviews;
+      function checkIfTabExists() {
+        if (document.querySelector("#tab" + newnextid) == null) {
+          window.setTimeout(checkIfTabExists, 50);
+        } else {
+          document.querySelector("#tab" + newnextid).click();
+          if (isnewtablink == true) {
+            go(newtablinkstr);
+            isnewtablink = false;
+            newtablinkstr = "";
+          }
+        }
+      }
+      checkIfTabExists();
+      nextid = nextid + 1;
+    }}>New tab</button
+  >
 </div>
 
 <div id="homepage">
@@ -172,7 +191,7 @@
     src="dummypage.html"
     id={tabandwebview.number}
     plugins
-    on:load-commit={(event) => {
+    on:did-start-loading={(event) => {
       if (
         event.target.src.includes("dummypage.html") &&
         tabandwebview.alreadydummypage == false
@@ -186,10 +205,12 @@
         tabandwebview.tabfavicon.src = "./newtab.png";
       } else {
         tabandwebview.alreadydummypage = false;
-        event.target.style.display = "flex";
+        if (event.target.src.includes("dummypage.html")) {
+          event.target.style.display = "flex";
+        }
         function checkURL() {
           if (event.target.src.includes("dummypage.html")) {
-            window.setTimeout(checkURL, 100);
+            window.setTimeout(checkURL, 50);
           } else {
             homepageurl = event.target.src;
             urlbarurl = event.target.src;
@@ -235,6 +256,7 @@
         currenturlhovered = event.url;
       }
     }}
+    bind:this={tabandwebview.webview}
   />
 {/each}
 
@@ -246,6 +268,6 @@
 
 <svelte:window
   on:load={() => {
-    document.querySelector("#tab1").click();
+    document.querySelector("#newtabbutton").click();
   }}
 />

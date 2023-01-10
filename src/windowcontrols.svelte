@@ -1,5 +1,5 @@
 <script>
-  let maximizebutton, restorebutton, yeet;
+  let maximizebutton, restorebutton;
 
   window.api.handle(
     "is-window-maximized",
