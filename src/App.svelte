@@ -112,8 +112,13 @@
           tabs.forEach((elmnt) => (elmnt.className = "tab"));
           tab.classList.add("active");
 
-          homepageurl = tabandwebview.webview.src;
-          urlbarurl = tabandwebview.webview.src;
+          if (tabandwebview.webview.src.includes("dummypage.html")) {
+            homepageurl = "";
+            urlbarurl = "";
+          } else {
+            homepageurl = tabandwebview.webview.src;
+            urlbarurl = tabandwebview.webview.src;
+          }
 
           if (
             webview.src !== "" &&
@@ -153,14 +158,25 @@
 
       tabsandwebviews = newtabsandwebviews;
       function checkIfTabExists() {
-        if (document.querySelector("#tab" + newnextid) == null) {
-          window.setTimeout(checkIfTabExists, 50);
+        if (document.getElementById(newnextid) == null) {
+          window.setTimeout(checkIfTabExists, 100);
         } else {
           document.querySelector("#tab" + newnextid).click();
+          if (
+            document.getElementById(newnextid).isLoadingMainFrame() == false
+          ) {
+            window.setTimeout(checkIfTabExists, 100);
+          }
           if (isnewtablink == true) {
             go(newtablinkstr);
+            document.querySelector("#tab" + newnextid).src =
+              "./loadingfavicon.svg";
             isnewtablink = false;
             newtablinkstr = "";
+          } else {
+            homepageurl = "";
+            urlbarurl = "";
+            document.querySelector("#urlbar input").focus();
           }
         }
       }
@@ -208,15 +224,6 @@
         if (event.target.src.includes("dummypage.html")) {
           event.target.style.display = "flex";
         }
-        function checkURL() {
-          if (event.target.src.includes("dummypage.html")) {
-            window.setTimeout(checkURL, 50);
-          } else {
-            homepageurl = event.target.src;
-            urlbarurl = event.target.src;
-          }
-        }
-        checkURL();
         tabandwebview.tabfavicon.src = "./loadingfavicon.svg";
       }
       if (event.target.canGoBack() == true) {
@@ -243,9 +250,14 @@
           faviconurl.split("/")[0];
       }
     }}
-    on:page-title-updated={(event) =>
-      (document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
-        event.title)}
+    on:page-title-updated={(event) => {
+      document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
+        event.title;
+      if (event.target.classList[0].includes("active")) {
+        homepageurl = event.target.src;
+        urlbarurl = event.target.src;
+      }
+    }}
     on:update-target-url={(event) => {
       let urlhoverdiv = document.querySelector("#urlhover");
 
