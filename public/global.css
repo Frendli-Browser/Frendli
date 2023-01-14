@@ -166,7 +166,7 @@ body {
 }
 
 #sidebar {
-	width: 200px;
+	width: 250px;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
@@ -190,7 +190,8 @@ body {
 	gap: 5px;
 }
 
-.tab {
+.tab,
+#newtabbutton {
 	width: 100%;
 	text-align: start;
 	border: none;
@@ -210,12 +211,14 @@ body {
 	font-weight: 600;
 }
 
-.tabfavicon {
+.tabfavicon,
+#newtabbutton>i {
 	width: 20px;
 	pointer-events: none;
 }
 
-.tab>p {
+.tab>p,
+#newtabbutton>p {
 	position: relative;
 	margin: 0;
 	display: inline;
@@ -224,13 +227,19 @@ body {
 	pointer-events: none;
 }
 
+#newtabbutton {
+	background: none;
+	border: none;
+	text-align: left;
+}
+
 webview,
 #homepage {
 	position: absolute;
 	top: 40px;
-	left: 200px;
+	left: 250px;
 	height: calc(100% - 40px);
-	width: calc(100% - 200px);
+	width: calc(100% - 250px);
 }
 
 #homepage {

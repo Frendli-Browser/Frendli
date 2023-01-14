@@ -5,9 +5,9 @@ require('update-electron-app')()
 const wallpaper = require("wallpaper");
 const sharp = require("sharp");
 
-try {
-  require('electron-reloader')(module);
-} catch (_) { }
+// try {
+//   require('electron-reloader')(module);
+// } catch (_) { }
 
 const path = require('path')
 const iconPath = path.join(__dirname, "public", "favicon.png");
@@ -83,10 +83,12 @@ function createWindow() {
     sharp(wallPath).blur(100).toFile("public/background.webp")
   }
 
-  getDesktopBackground()
+  ipcMain.handle('get-desktop-background', async (event, data) => {
+    getDesktopBackground();
+  })
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

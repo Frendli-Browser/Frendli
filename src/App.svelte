@@ -1,6 +1,8 @@
 <script>
   import WindowControls from "./windowcontrols.svelte";
 
+  window.api.send("get-desktop-background");
+
   let nextid = 1,
     newnextid;
   let isnewtablink = false;
@@ -27,6 +29,7 @@
 
     webview.loadURL(url);
     webview.style.display = "flex";
+    document.querySelector("#urlbar input").blur();
   }
 
   function isUrl(val = "") {
@@ -63,7 +66,19 @@
 
 <div id="topbar">
   <div id="webviewnavigation">
-    <button on:click={() => document.querySelector("webview.active").goBack()}>
+    <button
+      on:click={() => {
+        document.querySelector("webview.active").goBack();
+        if (
+          document
+            .querySelector("webview.active")
+            .src.includes("dummypage.html")
+        ) {
+          homepageurl = "";
+          urlbarurl = "";
+        }
+      }}
+    >
       <i id="back" class="fa-solid fa-caret-left" />
     </button>
     <button on:click={() => document.querySelector("webview.active").reload()}>
@@ -72,7 +87,18 @@
     <button
       on:click={() => {
         document.querySelector("webview.active").goForward();
-        document.querySelector("webview.active").style.display = "flex";
+        function checkIfLoaded() {
+          if (
+            document.querySelector("webview.active").isLoadingMainFrame() ==
+            true
+          ) {
+            window.setTimeout(checkIfLoaded, 25);
+          } else {
+            document.querySelector("webview.active").style.display = "flex";
+          }
+        }
+
+        checkIfLoaded();
       }}
     >
       <i id="forward" class="fa-solid fa-caret-right" />
@@ -182,7 +208,9 @@
       }
       checkIfTabExists();
       nextid = nextid + 1;
-    }}>New tab</button
+    }}
+    ><i class="fa-solid fa-plus" />
+    <p>New tab</p></button
   >
 </div>
 
@@ -226,6 +254,8 @@
         }
         tabandwebview.tabfavicon.src = "./loadingfavicon.svg";
       }
+    }}
+    on:load-commit={(event) => {
       if (event.target.canGoBack() == true) {
         document.getElementById("back").style.color = "black";
         document.getElementById("back").classList.add("active");
@@ -241,8 +271,11 @@
         document.getElementById("forward").classList.remove("active");
       }
     }}
-    on:did-frame-finish-load={() => {
-      if (tabandwebview.alreadydummypage == false) {
+    on:did-frame-finish-load={(event) => {
+      if (event.target.src.includes("dummypage.html")) {
+        tabandwebview.tabfavicon.src = "./newtab.png";
+        event.target.style.display = "none";
+      } else if (tabandwebview.alreadydummypage == false) {
         let faviconurl = event.target.src.replace("https://", "");
         tabandwebview.tabfavicon.src =
           // "https://s2.googleusercontent.com/s2/favicons?domain_url=" +
@@ -251,9 +284,14 @@
       }
     }}
     on:page-title-updated={(event) => {
-      document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
-        event.title;
-      if (event.target.classList[0].includes("active")) {
+      if (event.target.src.includes("dummypage.html")) {
+        homepageurl = "";
+        urlbarurl = "";
+        document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
+          "New tab";
+      } else {
+        document.querySelector("#tab" + tabandwebview.number + " p").innerHTML =
+          event.title;
         homepageurl = event.target.src;
         urlbarurl = event.target.src;
       }
