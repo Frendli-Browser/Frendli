@@ -297,7 +297,7 @@ webview {
 #urlhover {
 	position: absolute;
 	bottom: 10px;
-	left: 210px;
+	left: 260px;
 	width: fit-content;
 	height: fit-content;
 	background: var(--intense-blur);

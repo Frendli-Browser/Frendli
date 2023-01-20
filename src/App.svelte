@@ -8,7 +8,11 @@
   let isnewtablink = false;
   let newtablinkstr = "";
 
-  let tabsandwebviews = [];
+  let tabsandwebviews = new Array();
+
+  let tabOrder = new Array();
+
+  $: console.log(tabOrder);
 
   let homepageurl, urlbarurl, currenturlhovered;
 
@@ -41,12 +45,12 @@
     return false;
   }
 
-  document.onreadystatechange = function () {
-    var state = document.readyState;
-    if (state == "complete") {
-      document.getElementById("loading").style.display = "none";
-    }
-  };
+  // document.onreadystatechange = function () {
+  //   var state = document.readyState;
+  //   if (state == "complete") {
+
+  //   }
+  // };
 
   window.api.handle(
     "new-tab-url",
@@ -130,6 +134,11 @@
           let tabs = document.querySelectorAll(".tab");
           let tab = event.target;
 
+          if (tabOrder.indexOf(tabandwebview.number) > -1) {
+            tabOrder.splice(tabOrder.indexOf(tabandwebview.number), 1);
+          }
+          tabOrder[tabOrder.length] = tabandwebview.number;
+
           webviews.forEach((elmnt) => {
             elmnt.className = "";
             elmnt.style.display = "none";
@@ -138,12 +147,16 @@
           tabs.forEach((elmnt) => (elmnt.className = "tab"));
           tab.classList.add("active");
 
-          if (tabandwebview.webview.src.includes("dummypage.html")) {
+          if (
+            document
+              .getElementById(tabandwebview.number)
+              .src.includes("dummypage.html")
+          ) {
             homepageurl = "";
             urlbarurl = "";
           } else {
-            homepageurl = tabandwebview.webview.src;
-            urlbarurl = tabandwebview.webview.src;
+            homepageurl = document.getElementById(tabandwebview.number).src;
+            urlbarurl = document.getElementById(tabandwebview.number).src;
           }
 
           if (
@@ -154,15 +167,23 @@
             webview.style.display = "flex";
           }
         }}
-        bind:this={tabandwebview.tab}
       >
-        <img
-          alt="favicon"
-          src="./newtab.png"
-          class="tabfavicon"
-          bind:this={tabandwebview.tabfavicon}
-        />
+        <img alt="favicon" src="./newtab.png" class="tabfavicon" />
         <p>New Tab</p>
+        <button
+          on:click={(event) => {
+            event.stopPropagation();
+            tabsandwebviews.splice(
+              tabsandwebviews.indexOf(tabandwebview.number),
+              1
+            );
+            tabsandwebviews = tabsandwebviews;
+
+            tabOrder.splice(tabOrder.indexOf(tabandwebview.number), 1);
+            tabOrder = tabOrder;
+            document.querySelector("#tab" + tabOrder.slice(-1)[0]).click();
+          }}
+        />
       </button>
     {/each}
   </div>
@@ -230,7 +251,7 @@
   </form>
 </div>
 
-{#each tabsandwebviews as tabandwebview}
+{#each tabsandwebviews as tabandwebview, i (tabandwebview.number)}
   <webview
     src="dummypage.html"
     id={tabandwebview.number}
@@ -246,13 +267,15 @@
           "New Tab";
         homepageurl = "";
         urlbarurl = "";
-        tabandwebview.tabfavicon.src = "./newtab.png";
+        document.querySelector("#tab" + tabandwebview.number + " img").src =
+          "./newtab.png";
       } else {
         tabandwebview.alreadydummypage = false;
         if (event.target.src.includes("dummypage.html")) {
           event.target.style.display = "flex";
         }
-        tabandwebview.tabfavicon.src = "./loadingfavicon.svg";
+        document.querySelector("#tab" + tabandwebview.number + " img").src =
+          "./loadingfavicon.svg";
       }
     }}
     on:load-commit={(event) => {
@@ -273,11 +296,12 @@
     }}
     on:did-frame-finish-load={(event) => {
       if (event.target.src.includes("dummypage.html")) {
-        tabandwebview.tabfavicon.src = "./newtab.png";
+        document.querySelector("#tab" + tabandwebview.number + " img").src =
+          "./newtab.png";
         event.target.style.display = "none";
       } else if (tabandwebview.alreadydummypage == false) {
         let faviconurl = event.target.src.replace("https://", "");
-        tabandwebview.tabfavicon.src =
+        document.querySelector("#tab" + tabandwebview.number + " img").src =
           // "https://s2.googleusercontent.com/s2/favicons?domain_url=" +
           "http://democratic-gray-boar.faviconkit.com/" +
           faviconurl.split("/")[0];
@@ -306,7 +330,6 @@
         currenturlhovered = event.url;
       }
     }}
-    bind:this={tabandwebview.webview}
   />
 {/each}
 
@@ -319,5 +342,6 @@
 <svelte:window
   on:load={() => {
     document.querySelector("#newtabbutton").click();
+    document.getElementById("loading").style.display = "none";
   }}
 />
