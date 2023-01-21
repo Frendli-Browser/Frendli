@@ -256,14 +256,14 @@
       }
     }}
     on:load-commit={(event) => {
-      if (event.target.canGoBack() == true) {
+      if (document.querySelector("webview.active").canGoBack() == true) {
         document.getElementById("back").style.color = "black";
         document.getElementById("back").classList.add("active");
       } else {
         document.getElementById("back").style.color = "lightgrey";
         document.getElementById("back").classList.remove("active");
       }
-      if (event.target.canGoForward() == true) {
+      if (document.querySelector("webview.active").canGoForward() == true) {
         document.getElementById("forward").style.color = "black";
         document.getElementById("forward").classList.add("active");
       } else {
